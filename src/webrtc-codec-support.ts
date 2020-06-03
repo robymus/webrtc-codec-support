@@ -1,10 +1,10 @@
-import {toSessionJSON, toSessionSDP} from "sdp-jingle-json";
+import { toSessionJSON, toSessionSDP } from 'sdp-jingle-json';
 
 interface CodecPayload {
-  channels: number,
-  clockrate: number,
-  id: string,
-  name: string
+  channels: number;
+  clockrate: number;
+  id: string;
+  name: string;
   parameters?: any;
 }
 
@@ -12,45 +12,43 @@ interface CodecPayload {
  * WebrtcCodec: static variables describe each supported codecs for detection
  */
 class WebrtcCodec {
-
-  static readonly VP8 = new WebrtcCodec("video", {
+  static readonly VP8 = new WebrtcCodec('video', {
     channels: 1,
     clockrate: 90000,
-    id: "96",
-    name: "VP8"
+    id: '96',
+    name: 'VP8',
   });
 
-  static readonly VP9 = new WebrtcCodec("video", {
+  static readonly VP9 = new WebrtcCodec('video', {
     channels: 1,
     clockrate: 90000,
-    id: "100",
-    name: "VP9"
+    id: '100',
+    name: 'VP9',
   });
 
-  static readonly H264 = new WebrtcCodec("video", {
+  static readonly H264 = new WebrtcCodec('video', {
     channels: 1,
     clockrate: 90000,
-    id: "97",
-    name: "H264",
-    parameters: [{"key":"profile-level-id", "value":"42C01F"}]
+    id: '97',
+    name: 'H264',
+    parameters: [{ key: 'profile-level-id', value: '42C01F' }],
   });
 
-  static readonly OPUS = new WebrtcCodec("audio", {
+  static readonly OPUS = new WebrtcCodec('audio', {
     channels: 2,
     clockrate: 48000,
-    id: "111",
-    name: "OPUS"
+    id: '111',
+    name: 'OPUS',
   });
 
-  static readonly ISAC = new WebrtcCodec("audio", {
+  static readonly ISAC = new WebrtcCodec('audio', {
     channels: 1,
     clockrate: 32000,
-    id: "104",
-    name: "ISAC"
+    id: '104',
+    name: 'ISAC',
   });
 
-  private constructor(public readonly type: "audio"|"video", public readonly payload: CodecPayload ) {
-  }
+  private constructor(public readonly type: 'audio' | 'video', public readonly payload: CodecPayload) {}
 }
 
 /**
@@ -66,46 +64,47 @@ async function isWebrtcReceiveCodecSupported(codec: WebrtcCodec): Promise<boolea
     // build offer from server with specified codec (minimal and incomplete)
     const sdpOfferDesc = {
       groups: [{ contents: [codec.type], semantics: 'BUNDLE' }],
-      contents: [{
-        name: codec.type,
-        application: {
-          applicationType: "rtp",
-          media: codec.type,
-          mux: true,
-          payloads: [codec.payload]
+      contents: [
+        {
+          name: codec.type,
+          application: {
+            applicationType: 'rtp',
+            media: codec.type,
+            mux: true,
+            payloads: [codec.payload],
+          },
+          transport: {
+            candidates: [],
+            fingerprints: [{ hash: 'sha-256', setup: 'actpass', value: Array(32).fill('00').join(':') }],
+            pwd: '0'.repeat(22),
+            transportType: 'iceUdp',
+            ufrag: '0'.repeat(8),
+          },
         },
-        transport: {
-          candidates: [],
-          fingerprints: [{ hash: "sha-256", setup: "actpass", value: Array(32).fill("00").join(":") }],
-          pwd: "0".repeat(22),
-          transportType: "iceUdp",
-          ufrag: "0".repeat(8)
-        }
-      }]
+      ],
     };
-    const sdpOffer = toSessionSDP(sdpOfferDesc, { role: 'initiator', direction: 'outgoing' })
+    const sdpOffer = toSessionSDP(sdpOfferDesc, { role: 'initiator', direction: 'outgoing' });
 
     // set up peerconnection to negotiate SDPs
-    const peerConnection = new RTCPeerConnection({ 'iceServers': [] });
-    await peerConnection.setRemoteDescription(new RTCSessionDescription({ type: "offer", sdp: sdpOffer }));
+    const peerConnection = new RTCPeerConnection({ iceServers: [] });
+    await peerConnection.setRemoteDescription(new RTCSessionDescription({ type: 'offer', sdp: sdpOffer }));
     const sdpAnswer = await peerConnection.createAnswer();
     const sdpAnswerDesc = toSessionJSON(sdpAnswer.sdp, { role: 'responder', direction: 'outgoing' });
 
     // process answer SDP
     if (sdpAnswerDesc.contents === undefined) return false;
-    for (let content of sdpAnswerDesc.contents) {
+    for (const content of sdpAnswerDesc.contents) {
       if (content.application?.payloads === undefined) continue;
-      for (let payload of content.application.payloads) {
+      for (const payload of content.application.payloads) {
         // check if answer payload has the same codec name - other parameters are not checked
-        if (payload?.name?.toUpperCase() == codec.payload.name.toUpperCase()) return true;
+        if (payload?.name?.toUpperCase() === codec.payload.name.toUpperCase()) return true;
       }
     }
 
     // if none of the contents/payloads matches the requested codec, codec is not supported
     return false;
-  }
-  catch (e) {
-    console.warn("Can't determine if receive codec "+codec.payload.name+" is supported", e)
+  } catch (e) {
+    console.warn("Can't determine if receive codec " + codec.payload.name + ' is supported', e);
     return false;
   }
 }
@@ -123,13 +122,14 @@ async function isWebrtcReceiveCodecSupported(codec: WebrtcCodec): Promise<boolea
 async function isWebrtcPublishCodecSupported(mediaStream: MediaStream, codec: WebrtcCodec): Promise<boolean> {
   try {
     // setup peerconnection
-    const peerConnection = new RTCPeerConnection({ 'iceServers': [] });
-    if (codec.type == 'video') {
-      for (let track of mediaStream.getVideoTracks()) {
+    const peerConnection = new RTCPeerConnection({ iceServers: [] });
+    if (codec.type === 'video') {
+      for (const track of mediaStream.getVideoTracks()) {
         peerConnection.addTrack(track, mediaStream);
       }
-    } else { // 'audio'
-      for (let track of mediaStream.getAudioTracks()) {
+    } else {
+      // 'audio'
+      for (const track of mediaStream.getAudioTracks()) {
         peerConnection.addTrack(track, mediaStream);
       }
     }
@@ -139,18 +139,17 @@ async function isWebrtcPublishCodecSupported(mediaStream: MediaStream, codec: We
 
     // process offer SDP
     if (sdpOfferDesc.contents === undefined) return false;
-    for (let content of sdpOfferDesc.contents) {
+    for (const content of sdpOfferDesc.contents) {
       if (content.application?.payloads === undefined) continue;
-      for (let payload of content.application.payloads) {
+      for (const payload of content.application.payloads) {
         // check if answer payload has the same codec name - other parameters are not checked
-        if (payload?.name?.toUpperCase() == codec.payload.name.toUpperCase()) return true;
+        if (payload?.name?.toUpperCase() === codec.payload.name.toUpperCase()) return true;
       }
     }
 
     return false;
-  }
-  catch (e) {
-    console.warn("Can't determine if publish codec "+codec.payload.name+" is supported", e)
+  } catch (e) {
+    console.warn("Can't determine if publish codec " + codec.payload.name + ' is supported', e);
     return false;
   }
 }
