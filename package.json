@@ -1,6 +1,6 @@
 {
   "name": "webrtc-codec-support",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Checks if a codec is supported by WebRTC stack in browser",
   "main": "lib/webrtc-codec-support.js",
   "types": "lib/webrtc-codec-support.d.ts",
