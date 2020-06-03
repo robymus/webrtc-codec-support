@@ -1,5 +1,8 @@
 module.exports = {
-  globalSetup: './puppeteer_setup.js',
-  globalTeardown: './puppeteer_teardown.js',
-  testEnvironment: './puppeteer_environment.js',
+  preset: "jest-puppeteer",
+  transform: {
+    ".(ts|tsx)": "ts-jest"
+  },
+  testRegex: "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+  moduleFileExtensions: ["ts", "tsx", "js"]
 }

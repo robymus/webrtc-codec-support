@@ -1,6 +1,6 @@
 {
   "name": "webrtc-codec-support",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Checks if a codec is supported by WebRTC stack in browser",
   "main": "lib/webrtc-codec-support.js",
   "types": "lib/webrtc-codec-support.d.ts",
@@ -38,15 +38,21 @@
     "sdp-jingle-json": "^3.1.0"
   },
   "devDependencies": {
+    "@types/expect-puppeteer": "^4.4.3",
+    "@types/jest": "^25.2.3",
+    "@types/jest-environment-puppeteer": "^4.3.1",
+    "@types/puppeteer": "^3.0.0",
     "jest": "^26.0.1",
+    "jest-puppeteer": "^4.4.0",
     "prettier": "^2.0.5",
-    "puppeteer": "^3.2.0",
-    "rimraf": "^3.0.2",
+    "puppeteer": "^3.3.0",
+    "ts-jest": "^26.1.0",
     "ts-loader": "^7.0.5",
     "tslint": "^6.1.2",
     "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.9.3",
     "webpack": "^4.43.0",
-    "webpack-cli": "^3.3.11"
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.11.0"
   }
 }

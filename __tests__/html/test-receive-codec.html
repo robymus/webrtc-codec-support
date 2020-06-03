@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test-receive-codec</title>
+    <script type="systemjs-importmap">
+    {
+      "imports": {
+        "webrtc-codec-support": "/webrtc-codec-support.min.js"
+      }
+    }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/systemjs/dist/system.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/systemjs/dist/extras/amd.js"></script>
+</head>
+<body onload="startTest()">
+
+<pre>
+VP8: <span id="vp8">pending</span>
+VP9: <span id="vp9">pending</span>
+H264: <span id="h264">pending</span>
+OPUS: <span id="opus">pending</span>
+ISAC: <span id="isac">pending</span>
+</pre>
+
+<script>
+    function startTest() {
+      System.import('webrtc-codec-support').then((module)=>{
+        W = module.default;
+
+        W.isWebrtcReceiveCodecSupported(W.WebrtcCodec.VP8).then((s)=>{
+          document.getElementById('vp8').innerText = String(s);
+        });
+
+        W.isWebrtcReceiveCodecSupported(W.WebrtcCodec.VP9).then((s)=>{
+          document.getElementById('vp9').innerText = String(s);
+        });
+
+        W.isWebrtcReceiveCodecSupported(W.WebrtcCodec.H264).then((s)=>{
+          document.getElementById('h264').innerText = String(s);
+        });
+
+        W.isWebrtcReceiveCodecSupported(W.WebrtcCodec.OPUS).then((s)=>{
+          document.getElementById('opus').innerText = String(s);
+        });
+
+        W.isWebrtcReceiveCodecSupported(W.WebrtcCodec.ISAC).then((s)=>{
+          document.getElementById('isac').innerText = String(s);
+        });
+
+      });
+    }
+</script>
+</body>
+</html>
