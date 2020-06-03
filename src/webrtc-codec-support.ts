@@ -33,7 +33,7 @@ class WebrtcCodec {
     name: 'H264',
     parameters: [
       { key: 'profile-level-id', value: '42C01F' },
-      { key: 'packetization-mode', value: '1' }
+      { key: 'packetization-mode', value: '1' },
     ],
   });
 
