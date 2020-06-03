@@ -31,7 +31,10 @@ class WebrtcCodec {
     clockrate: 90000,
     id: '97',
     name: 'H264',
-    parameters: [{ key: 'profile-level-id', value: '42C01F' }],
+    parameters: [
+      { key: 'profile-level-id', value: '42C01F' },
+      { key: 'packetization-mode', value: '1' }
+    ],
   });
 
   static readonly OPUS = new WebrtcCodec('audio', {
