@@ -46,7 +46,7 @@ class WebrtcCodec {
 
   static readonly ISAC = new WebrtcCodec('audio', {
     channels: 1,
-    clockrate: 32000,
+    clockrate: 16000,
     id: '104',
     name: 'ISAC',
   });
