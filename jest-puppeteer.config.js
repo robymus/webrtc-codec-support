@@ -3,7 +3,7 @@ module.exports = {
     command: "webpack-dev-server"
   },
   launch: {
-    headless: false,
+    headless: true,
     args: [ "--use-fake-ui-for-media-stream" ]
   }
 };
