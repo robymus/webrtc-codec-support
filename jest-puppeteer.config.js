@@ -4,5 +4,6 @@ module.exports = {
   },
   launch: {
     headless: false,
+    args: [ "--use-fake-ui-for-media-stream" ]
   }
 };
