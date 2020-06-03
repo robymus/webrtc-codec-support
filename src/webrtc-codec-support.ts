@@ -5,6 +5,7 @@ interface CodecPayload {
   clockrate: number,
   id: string,
   name: string
+  parameters?: any;
 }
 
 /**
@@ -29,8 +30,9 @@ class WebrtcCodec {
   static readonly H264 = new WebrtcCodec("video", {
     channels: 1,
     clockrate: 90000,
-    id: "108",
-    name: "H264"
+    id: "97",
+    name: "H264",
+    parameters: [{"key":"profile-level-id", "value":"42C01F"}]
   });
 
   static readonly OPUS = new WebrtcCodec("audio", {
