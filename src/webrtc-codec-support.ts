@@ -107,7 +107,7 @@ async function isWebrtcReceiveCodecSupported(codec: WebrtcCodec): Promise<boolea
     // if none of the contents/payloads matches the requested codec, codec is not supported
     return false;
   } catch (e) {
-    console.warn("Can't determine if receive codec " + codec.payload.name + ' is supported', e);
+    // Safari throws exception when a codec is not supported - this is not an error
     return false;
   }
 }
@@ -152,7 +152,7 @@ async function isWebrtcPublishCodecSupported(mediaStream: MediaStream, codec: We
 
     return false;
   } catch (e) {
-    console.warn("Can't determine if publish codec " + codec.payload.name + ' is supported', e);
+    // Safari throws exception when a codec is not supported - this is not an error
     return false;
   }
 }
